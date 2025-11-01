@@ -18,9 +18,17 @@ $config = [
 $app = new yii\console\Application($config);
 
 try {
-  // Запускаем миграции
   echo "Running migrations...\n";
-  $result = $app->runAction('migrate/up', ['migrationPath' => '@app/migrations', 'interactive' => false]);
+
+  // Создаем экземпляр мигратора
+  $migrator = new yii\console\controllers\MigrateController('migrate', $app);
+
+  // Запускаем миграции
+  $migrator->runAction('up', [
+    'migrationPath' => '@app/migrations',
+    'interactive' => false
+  ]);
+
   echo "Migrations completed successfully!\n";
 } catch (Exception $e) {
   echo "Migration failed: " . $e->getMessage() . "\n";
