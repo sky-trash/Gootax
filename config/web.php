@@ -1,10 +1,10 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$db = require __DIR__ . '/db.local.php';
 
 $config = [
-    'id' => 'basic',
+    'id' => 'blog',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -13,8 +13,7 @@ $config = [
     ],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '2C-Q0KSY_khTSVqH0XrQiBGQooXk1-JT',
+            'cookieValidationKey' => 'your-cookie-validation-key-here',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -26,12 +25,6 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => \yii\symfonymailer\Mailer::class,
-            'viewPath' => '@app/mail',
-            // send all mails to a file by default.
-            'useFileTransport' => true,
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -42,14 +35,15 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'post/<id:\d+>' => 'post/view',
+                'posts' => 'post/index',
+                '' => 'site/index',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
