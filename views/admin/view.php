@@ -7,18 +7,18 @@ use yii\widgets\DetailView;
 /** @var app\models\Post $model */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Управление записями', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="post-view">
+<div class="admin-view">
   <h1><?= Html::encode($this->title) ?></h1>
 
   <p>
-    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+    <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
       'class' => 'btn btn-danger',
       'data' => [
-        'confirm' => 'Are you sure you want to delete this item?',
+        'confirm' => 'Вы уверены, что хотите удалить эту запись?',
         'method' => 'post',
       ],
     ]) ?>
@@ -29,17 +29,31 @@ $this->params['breadcrumbs'][] = $this->title;
     'attributes' => [
       'id',
       'title',
-      'content:ntext',
+      [
+        'attribute' => 'content',
+        'format' => 'ntext',
+        'label' => 'Содержание'
+      ],
       [
         'attribute' => 'status',
         'value' => $model->getStatusLabel(),
+        'label' => 'Статус'
       ],
       [
         'attribute' => 'author_id',
-        'value' => $model->author->username ?? 'Unknown',
+        'value' => $model->author->username ?? 'Неизвестен',
+        'label' => 'Автор'
       ],
-      'created_at:datetime',
-      'updated_at:datetime',
+      [
+        'attribute' => 'created_at',
+        'format' => 'datetime',
+        'label' => 'Создано'
+      ],
+      [
+        'attribute' => 'updated_at',
+        'format' => 'datetime',
+        'label' => 'Обновлено'
+      ],
     ],
   ]) ?>
 </div>

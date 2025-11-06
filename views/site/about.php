@@ -1,17 +1,17 @@
 <?php
 
-/** @var yii\web\View $this */
-
 use yii\helpers\Html;
 
-$this->title = 'About';
+/** @var yii\web\View $this */
+
+$this->title = 'О сайте';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        This is the About page. You may modify the following file to customize its content:
+        Это страница "О сайте". Вы можете изменить содержимое этого файла, чтобы настроить его:
     </p>
 
     <code><?= __FILE__ ?></code>

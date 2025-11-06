@@ -7,7 +7,7 @@ use yii\helpers\StringHelper;
 
 ?>
 <div class="post">
-  <h2><?= Html::a(Html::encode($model->title), ['view', 'id' => $model->id]) ?></h2>
+  <h2><?= Html::a(Html::encode($model->title), ['/post/view', 'id' => $model->id]) ?></h2>
 
   <div class="post-meta">
     <span class="author">Автор: <?= Html::encode($model->author->username ?? 'Неизвестен') ?></span>
@@ -19,7 +19,7 @@ use yii\helpers\StringHelper;
   </div>
 
   <div class="post-read-more">
-    <?= Html::a('Читать далее →', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Читать далее →', ['/post/view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
   </div>
 </div>
 

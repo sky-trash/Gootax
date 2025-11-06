@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\Post $model */
@@ -12,19 +11,19 @@ use yii\helpers\ArrayHelper;
 <div class="post-form">
   <?php $form = ActiveForm::begin(); ?>
 
-  <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+  <?= $form->field($model, 'title')->textInput(['maxlength' => true])->label('Заголовок') ?>
 
-  <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
+  <?= $form->field($model, 'content')->textarea(['rows' => 6])->label('Содержание') ?>
 
   <?= $form->field($model, 'status')->dropDownList([
-    $model::STATUS_DRAFT => 'Draft',
-    $model::STATUS_PUBLISHED => 'Published',
-  ]) ?>
+    $model::STATUS_DRAFT => 'Черновик',
+    $model::STATUS_PUBLISHED => 'Опубликовано',
+  ])->label('Статус') ?>
 
   <?= $form->field($model, 'author_id')->hiddenInput(['value' => 1])->label(false) ?>
 
   <div class="form-group">
-    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
   </div>
 
   <?php ActiveForm::end(); ?>
