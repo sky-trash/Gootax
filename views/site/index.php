@@ -6,17 +6,17 @@ use yii\widgets\ListView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'My Blog';
+$this->title = 'Мой Блог';
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <h1>Welcome to My Blog!</h1>
-        <p class="lead">This is a simple blog built with Yii2 and SQLite.</p>
+        <h1>Добро пожаловать в мой блог!</h1>
+        <p class="lead">Это простой блог, созданный на Yii2 и SQLite.</p>
     </div>
 
     <div class="body-content">
-        <h2>Latest Posts</h2>
-        
+        <h2>Последние записи</h2>
+
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
             'itemView' => '../post/_post',

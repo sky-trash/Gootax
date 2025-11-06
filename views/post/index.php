@@ -6,7 +6,7 @@ use yii\data\ActiveDataProvider;
 
 /** @var ActiveDataProvider $dataProvider */
 
-$this->title = 'Blog Posts';
+$this->title = 'Все записи блога';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="post-index">

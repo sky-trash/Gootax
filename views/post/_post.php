@@ -10,8 +10,8 @@ use yii\helpers\StringHelper;
   <h2><?= Html::a(Html::encode($model->title), ['view', 'id' => $model->id]) ?></h2>
 
   <div class="post-meta">
-    <span class="author">By <?= Html::encode($model->author->username ?? 'Unknown') ?></span>
-    <span class="date">on <?= Yii::$app->formatter->asDatetime($model->created_at) ?></span>
+    <span class="author">Автор: <?= Html::encode($model->author->username ?? 'Неизвестен') ?></span>
+    <span class="date">Опубликовано: <?= Yii::$app->formatter->asDatetime($model->created_at) ?></span>
   </div>
 
   <div class="post-content">
@@ -19,7 +19,7 @@ use yii\helpers\StringHelper;
   </div>
 
   <div class="post-read-more">
-    <?= Html::a('Read more →', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Читать далее →', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
   </div>
 </div>
 
