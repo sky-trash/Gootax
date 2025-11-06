@@ -13,12 +13,13 @@ $config = [
     ],
     'components' => [
         'request' => [
-            'cookieValidationKey' => 'your-cookie-validation-key-here',
+            'cookieValidationKey' => 'your-cookie-validation-key-here-change-this',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
+            'class' => 'yii\web\User',
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
@@ -34,13 +35,14 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' => array_merge(['class' => 'yii\db\Connection'], $db),
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
                 'post/<id:\d+>' => 'post/view',
                 'posts' => 'post/index',
+                'admin' => 'admin/index',
                 '' => 'site/index',
             ],
         ],
@@ -49,19 +51,14 @@ $config = [
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
