@@ -45,11 +45,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{view} {update} {delete}',
             'buttons' => [
               'view' => function ($url, $model) {
-                return Html::a('Просмотр', ['review/city', 'id' => $model->city->id], [
-                  'class' => 'btn btn-xs btn-default'
+                // Проверяем, существует ли город
+                if ($model->city && $model->city->id) {
+                  return Html::a('Просмотр', ['review/city', 'id' => $model->city->id], [
+                    'class' => 'btn btn-sm btn-default'
+                  ]);
+                } else {
+                  // Альтернативное действие, если город не указан
+                  return Html::a('Просмотр', ['view', 'id' => $model->id], [
+                    'class' => 'btn btn-sm btn-default'
+                  ]);
+                }
+              },
+              'update' => function ($url, $model) {
+                return Html::a('Редактировать', ['update', 'id' => $model->id], [
+                  'class' => 'btn btn-sm btn-primary'
+                ]);
+              },
+              'delete' => function ($url, $model) {
+                return Html::a('Удалить', ['delete', 'id' => $model->id], [
+                  'class' => 'btn btn-sm btn-danger',
+                  'data' => [
+                    'confirm' => 'Вы уверены, что хотите удалить этот отзыв?',
+                    'method' => 'post',
+                  ],
                 ]);
               }
-            ]
+            ],
           ],
         ],
       ]); ?>

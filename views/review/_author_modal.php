@@ -6,12 +6,14 @@ use yii\helpers\Url;
 /** @var app\models\User $author */
 ?>
 
-<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-  <h4 class="modal-title">Информация об авторе</h4>
+<div class="modal-header" style="padding: 15px; border-bottom: 1px solid #e5e5e5;">
+  <h5 class="modal-title">Информация об авторе</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" style="padding: 15px;">
   <div class="row">
     <div class="col-md-12">
       <p><strong>ФИО:</strong> <?= Html::encode($author->fio) ?></p>
@@ -20,7 +22,7 @@ use yii\helpers\Url;
         <p><strong>Телефон:</strong> <?= Html::encode($author->phone) ?></p>
       <?php endif; ?>
 
-      <hr>
+      <hr style="margin: 15px 0;">
 
       <p>
         <?= Html::a('Посмотреть все отзывы автора', ['review/author', 'id' => $author->id], [
@@ -32,6 +34,6 @@ use yii\helpers\Url;
   </div>
 </div>
 
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+<div class="modal-footer" style="padding: 15px; border-top: 1px solid #e5e5e5;">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 </div>

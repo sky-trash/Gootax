@@ -17,6 +17,20 @@ class User extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
+    public static function getDb()
+    {
+        // Проверяем существование таблицы перед выполнением запросов
+        $db = parent::getDb();
+        $tableName = str_replace(['{{%', '}}'], '', static::tableName());
+
+        if (!in_array($tableName, $db->schema->getTableNames())) {
+            // Если таблицы нет, возвращаем null чтобы избежать ошибок
+            return null;
+        }
+
+        return $db;
+    }
+
     public function rules()
     {
         return [
@@ -53,6 +67,11 @@ class User extends ActiveRecord implements IdentityInterface
     // IdentityInterface methods
     public static function findIdentity($id)
     {
+        $db = static::getDb();
+        if (!$db) {
+            return null;
+        }
+
         return static::findOne(['id' => $id, 'status' => self::STATUS_EMAIL_CONFIRMED]);
     }
 
@@ -110,6 +129,11 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findByEmail($email)
     {
+        $db = static::getDb();
+        if (!$db) {
+            return null;
+        }
+
         return static::findOne(['email' => $email]);
     }
 }

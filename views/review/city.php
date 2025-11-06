@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ListView;
-use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\City $city */
@@ -17,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12">
       <h1><?= Html::encode($this->title) ?></h1>
 
-      <div class="pull-right">
+      <div style="margin-bottom: 20px;">
         <?= Html::a('Сменить город', ['site/clear-city'], [
           'class' => 'btn btn-default'
         ]) ?>
@@ -25,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
   </div>
 
-  <div class="row" style="margin-top: 20px;">
+  <div class="row">
     <div class="col-md-12">
       <?= ListView::widget([
         'dataProvider' => $dataProvider,

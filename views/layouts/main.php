@@ -9,7 +9,8 @@ use yii\bootstrap5\NavBar;
 use yii\bootstrap5\Breadcrumbs;
 use app\assets\AppAsset;
 
-AppAsset::register($this);
+// Временно используем CDN вместо AssetBundle
+// AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -21,6 +22,12 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <?php $this->head() ?>
 </head>
 
@@ -51,7 +58,7 @@ AppAsset::register($this);
                 . Html::beginForm(['/auth/logout'])
                 . Html::submitButton(
                     'Выход (' . Yii::$app->user->identity->fio . ')',
-                    ['class' => 'nav-link btn btn-link']
+                    ['class' => 'nav-link btn btn-link border-0']
                 )
                 . Html::endForm()
                 . '</li>';

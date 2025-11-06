@@ -12,6 +12,18 @@ use app\models\RegisterForm;
 
 class AuthController extends Controller
 {
+  public $layout = 'basic';
+
+  public function actions()
+  {
+    return [
+      'captcha' => [
+        'class' => 'yii\captcha\CaptchaAction',
+        'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+      ],
+    ];
+  }
+
   public function actionLogin()
   {
     if (!Yii::$app->user->isGuest) {

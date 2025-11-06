@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'feedback-system',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log'], // Убрали 'debug', 'gii'
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -17,6 +17,7 @@ $config = [
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
+            'cachePath' => '@runtime/cache',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -59,10 +60,21 @@ $config = [
             'class' => 'yii\web\Session',
             'timeout' => 7200,
         ],
+        'cityApi' => [
+            'class' => 'app\components\CityApiService',
+            'apiKey' => 'your-api-key-here',
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => true,
+            'fileTransportPath' => '@runtime/mail',
+        ],
     ],
     'params' => $params,
 ];
 
+// Закомментируем debug и gii для production
+/*
 if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
@@ -74,5 +86,6 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
     ];
 }
+*/
 
 return $config;

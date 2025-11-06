@@ -8,6 +8,8 @@ use app\models\City;
 
 class SiteController extends Controller
 {
+    public $layout = 'basic';
+
     public function actions()
     {
         return [
@@ -19,6 +21,15 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        // Кешируем список городов на 5 минут
+        $cacheKey = 'cities_list_' . (Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->id);
+        $cities = Yii::$app->cache->getOrSet($cacheKey, function () {
+            return City::find()
+                ->joinWith('reviews')
+                ->orderBy(['name' => SORT_ASC])
+                ->all();
+        }, 300);
+
         $selectedCityId = Yii::$app->session->get('selected_city_id');
         $selectedCity = null;
 
@@ -36,11 +47,6 @@ class SiteController extends Controller
         if ($detectedCityName) {
             $detectedCity = Yii::$app->ipGeo->findCityInDatabase($detectedCityName);
         }
-
-        $cities = City::find()
-            ->joinWith('reviews')
-            ->orderBy(['name' => SORT_ASC])
-            ->all();
 
         return $this->render('index', [
             'detectedCity' => $detectedCity,

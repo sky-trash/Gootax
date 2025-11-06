@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12">
       <h1><?= Html::encode($this->title) ?></h1>
 
-      <div class="author-info well">
+      <div class="author-info" style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
         <p><strong>Email:</strong> <?= Html::encode($author->email) ?></p>
         <?php if ($author->phone): ?>
           <p><strong>Телефон:</strong> <?= Html::encode($author->phone) ?></p>

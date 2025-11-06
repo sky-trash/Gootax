@@ -4,7 +4,6 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\Html;
 
 class RegisterForm extends Model
 {
@@ -52,19 +51,33 @@ class RegisterForm extends Model
     $user->phone = $this->phone;
     $user->setPassword($this->password);
     $user->generateEmailConfirmToken();
+    $user->status = User::STATUS_INACTIVE;
 
     if ($user->save()) {
-      // В реальном проекте здесь была бы отправка email
+      // В реальном проекте раскомментировать для отправки email
       // $this->sendConfirmationEmail($user);
 
-      // Для демонстрации просто выводим ссылку
+      // Для демонстрации показываем ссылку
       Yii::$app->session->setFlash(
         'info',
-        'Для демонстрации: ' .
-          Html::a('Подтвердить email', ['auth/confirm-email', 'token' => $user->email_confirm_token])
+        'Для завершения регистрации перейдите по ссылке: ' .
+          \yii\helpers\Html::a(
+            'Подтвердить email',
+            ['auth/confirm-email', 'token' => $user->email_confirm_token],
+            ['target' => '_blank']
+          )
       );
 
       return true;
+    }
+
+    // Если ошибка сохранения, добавим ошибки в модель
+    if ($user->hasErrors()) {
+      foreach ($user->errors as $attribute => $errors) {
+        foreach ($errors as $error) {
+          $this->addError($attribute, $error);
+        }
+      }
     }
 
     return false;
@@ -72,10 +85,10 @@ class RegisterForm extends Model
 
   protected function sendConfirmationEmail($user)
   {
-    // Реальная отправка email в продакшене
     return Yii::$app->mailer->compose('emailConfirm', ['user' => $user])
       ->setTo($user->email)
-      ->setSubject('Подтверждение регистрации')
+      ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
+      ->setSubject('Подтверждение регистрации в ' . Yii::$app->name)
       ->send();
   }
 }
