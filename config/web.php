@@ -40,6 +40,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'confirm-email/<token:\w+>' => 'auth/confirm-email',
                 'city/<id:\d+>' => 'review/city',
                 'author/<id:\d+>' => 'review/author',
                 'login' => 'auth/login',
