@@ -108,6 +108,35 @@ class ReviewManageController extends Controller
     return $this->redirect(['update', 'id' => $id]);
   }
 
+  public function actionCity($id)
+  {
+    $cacheKey = "city_reviews_{$id}";
+    $city = Yii::$app->cache->getOrSet($cacheKey, function () use ($id) {
+      return City::findOne($id);
+    }, 300);
+
+    if (!$city) {
+      throw new NotFoundHttpException('Город не найден.');
+    }
+
+    $this->checkCitySession($id);
+
+    $dataProvider = new ActiveDataProvider([
+      'query' => Review::find()
+        ->where(['id_city' => $id])
+        ->with(['author', 'city'])
+        ->orderBy(['date_create' => SORT_DESC]),
+      'pagination' => [
+        'pageSize' => 10,
+      ],
+    ]);
+
+    return $this->render('city', [
+      'city' => $city,
+      'dataProvider' => $dataProvider,
+    ]);
+  }
+
   public function actionCityAutocomplete($q = null)
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

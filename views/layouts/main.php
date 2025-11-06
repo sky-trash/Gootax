@@ -3,101 +3,125 @@
 /** @var yii\web\View $this */
 /** @var string $content */
 
+use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use app\widgets\Alert;
-use yii\bootstrap5\Breadcrumbs;
-use yii\bootstrap5\Html;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
-
-$this->registerCsrfMetaTags();
-$this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
-$this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
-$this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
-$this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
-$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
-
-$menuItems = [
-    ['label' => 'Главная', 'url' => ['/site/index']],
-];
-
-if (Yii::$app->user->isGuest) {
-    $menuItems[] = ['label' => 'Вход', 'url' => ['/auth/login']];
-    $menuItems[] = ['label' => 'Регистрация', 'url' => ['/auth/register']];
-} else {
-    $menuItems[] = ['label' => 'Мои отзывы', 'url' => ['/review-manage/index']];
-    $menuItems[] = ['label' => 'Создать отзыв', 'url' => ['/review-manage/create']];
-    $menuItems[] = '<li>'
-        . Html::beginForm(['/auth/logout'], 'post')
-        . Html::submitButton(
-            'Выход (' . Yii::$app->user->identity->fio . ')',
-            ['class' => 'btn btn-link logout']
-        )
-        . Html::endForm()
-        . '</li>';
-}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>" class="h-100">
+<html lang="<?= Yii::$app->language ?>">
 
 <head>
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 
-<body class="d-flex flex-column h-100">
+<body>
     <?php $this->beginBody() ?>
 
-    <header id="header">
+    <div class="wrap">
         <?php
         NavBar::begin([
-            'brandLabel' => Yii::$app->name,
+            'brandLabel' => 'Система отзывов',
             'brandUrl' => Yii::$app->homeUrl,
-            'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+            'options' => [
+                'class' => 'navbar-inverse navbar-fixed-top',
+            ],
         ]);
+
+        $menuItems = [
+            ['label' => 'Главная', 'url' => ['/site/index']],
+        ];
+
+        if (Yii::$app->user->isGuest) {
+            $menuItems[] = ['label' => 'Вход', 'url' => ['/auth/login']];
+            $menuItems[] = ['label' => 'Регистрация', 'url' => ['/auth/register']];
+        } else {
+            $menuItems[] = ['label' => 'Мои отзывы', 'url' => ['/review-manage/index']];
+            $menuItems[] = ['label' => 'Создать отзыв', 'url' => ['/review-manage/create']];
+            $menuItems[] = '<li>'
+                . Html::beginForm(['/auth/logout'], 'post')
+                . Html::submitButton(
+                    'Выход (' . Yii::$app->user->identity->fio . ')',
+                    ['class' => 'btn btn-link logout', 'style' => 'padding: 10px 15px; border: none;']
+                )
+                . Html::endForm()
+                . '</li>';
+        }
+
         echo Nav::widget([
-            'options' => ['class' => 'navbar-nav'],
-            'items' => [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-                Yii::$app->user->isGuest
-                    ? ['label' => 'Login', 'url' => ['/site/login']]
-                    : '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
-            ]
+            'options' => ['class' => 'navbar-nav navbar-right'],
+            'items' => $menuItems,
         ]);
         NavBar::end();
         ?>
-    </header>
 
-    <main id="main" class="flex-shrink-0" role="main">
-        <div class="container">
-            <?php if (!empty($this->params['breadcrumbs'])): ?>
-                <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-            <?php endif ?>
-            <?= Alert::widget() ?>
+        <div class="container" style="margin-top: 70px;">
+            <?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
             <?= $content ?>
         </div>
-    </main>
+    </div>
 
-    <footer id="footer" class="mt-auto py-3 bg-light">
+    <footer class="footer">
         <div class="container">
-            <div class="row text-muted">
-                <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-                <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
-            </div>
+            <p class="pull-left">&copy; Система отзывов <?= date('Y') ?></p>
+            <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
+
+    <!-- Модальное окно для информации об авторе -->
+    <div class="modal fade" id="author-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Контент будет загружен через AJAX -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Прелоадер для AJAX -->
+    <div id="ajax-loader" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 5px;">
+        <div class="text-center">
+            <i class="glyphicon glyphicon-refresh glyphicon-spin" style="font-size: 40px;"></i>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <?php
+    $js = <<<JS
+$(document).on('click', '.author-link', function(e) {
+    e.preventDefault();
+    var authorId = $(this).data('author-id');
+    
+    $('#author-modal .modal-content').html('<div class="text-center"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i> Загрузка...</div>');
+    $('#author-modal').modal('show');
+    
+    $.get('/review/view?id=' + authorId, function(data) {
+        $('#author-modal .modal-content').html(data);
+    }).fail(function() {
+        $('#author-modal .modal-content').html('<div class="alert alert-danger">Ошибка загрузки данных</div>');
+    });
+});
+
+// Прелоадер для AJAX запросов
+$(document).ajaxStart(function() {
+    $('#ajax-loader').show();
+}).ajaxStop(function() {
+    $('#ajax-loader').hide();
+});
+JS;
+
+    $this->registerJs($js);
+    ?>
 
     <?php $this->endBody() ?>
 </body>

@@ -46,7 +46,10 @@ $config = [
                 'login' => 'auth/login',
                 'register' => 'auth/register',
                 'logout' => 'auth/logout',
+                'my-reviews' => 'review-manage/index',
+                'create-review' => 'review-manage/create',
                 '' => 'site/index',
+                '<action:\w+>' => 'site/<action>',
             ],
         ],
         'ipGeo' => [
