@@ -4,9 +4,9 @@
 /** @var string $content */
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+use yii\bootstrap5\Nav;
+use yii\bootstrap5\NavBar;
+use yii\bootstrap5\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
@@ -33,7 +33,7 @@ AppAsset::register($this);
             'brandLabel' => 'Система отзывов',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
-                'class' => 'navbar-inverse navbar-fixed-top',
+                'class' => 'navbar navbar-expand-lg navbar-dark bg-dark fixed-top',
             ],
         ]);
 
@@ -47,41 +47,69 @@ AppAsset::register($this);
         } else {
             $menuItems[] = ['label' => 'Мои отзывы', 'url' => ['/review-manage/index']];
             $menuItems[] = ['label' => 'Создать отзыв', 'url' => ['/review-manage/create']];
-            $menuItems[] = '<li>'
-                . Html::beginForm(['/auth/logout'], 'post')
+            $menuItems[] = '<li class="nav-item">'
+                . Html::beginForm(['/auth/logout'])
                 . Html::submitButton(
                     'Выход (' . Yii::$app->user->identity->fio . ')',
-                    ['class' => 'btn btn-link logout', 'style' => 'padding: 10px 15px; border: none;']
+                    ['class' => 'nav-link btn btn-link']
                 )
                 . Html::endForm()
                 . '</li>';
         }
 
         echo Nav::widget([
-            'options' => ['class' => 'navbar-nav navbar-right'],
+            'options' => ['class' => 'navbar-nav ms-auto'],
             'items' => $menuItems,
         ]);
         NavBar::end();
         ?>
 
-        <div class="container" style="margin-top: 70px;">
+        <div class="container" style="margin-top: 76px;">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
+
+            <?php if (Yii::$app->session->hasFlash('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show">
+                    <?= Yii::$app->session->getFlash('success') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (Yii::$app->session->hasFlash('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <?= Yii::$app->session->getFlash('error') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (Yii::$app->session->hasFlash('info')): ?>
+                <div class="alert alert-info alert-dismissible fade show">
+                    <?= Yii::$app->session->getFlash('info') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
             <?= $content ?>
         </div>
     </div>
 
-    <footer class="footer">
+    <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
-            <p class="pull-left">&copy; Система отзывов <?= date('Y') ?></p>
-            <p class="pull-right"><?= Yii::powered() ?></p>
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="text-muted">&copy; Система отзывов <?= date('Y') ?></span>
+                </div>
+                <div class="col-md-6 text-end">
+                    <span class="text-muted"><?= Yii::powered() ?></span>
+                </div>
+            </div>
         </div>
     </footer>
 
     <!-- Модальное окно для информации об авторе -->
-    <div class="modal fade" id="author-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="author-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Контент будет загружен через AJAX -->
             </div>
@@ -89,10 +117,12 @@ AppAsset::register($this);
     </div>
 
     <!-- Прелоадер для AJAX -->
-    <div id="ajax-loader" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 5px;">
+    <div id="ajax-loader" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background: rgba(255,255,255,0.9); padding: 20px; border-radius: 5px; border: 1px solid #ddd;">
         <div class="text-center">
-            <i class="glyphicon glyphicon-refresh glyphicon-spin" style="font-size: 40px;"></i>
-            <p>Загрузка...</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>
+            <p class="mt-2">Загрузка...</p>
         </div>
     </div>
 
@@ -102,13 +132,14 @@ $(document).on('click', '.author-link', function(e) {
     e.preventDefault();
     var authorId = $(this).data('author-id');
     
-    $('#author-modal .modal-content').html('<div class="text-center"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i> Загрузка...</div>');
-    $('#author-modal').modal('show');
+    $('#author-modal .modal-content').html('<div class="text-center p-4"><div class="spinner-border"></div><br>Загрузка...</div>');
+    var modal = new bootstrap.Modal(document.getElementById('author-modal'));
+    modal.show();
     
     $.get('/review/view?id=' + authorId, function(data) {
         $('#author-modal .modal-content').html(data);
     }).fail(function() {
-        $('#author-modal .modal-content').html('<div class="alert alert-danger">Ошибка загрузки данных</div>');
+        $('#author-modal .modal-content').html('<div class="alert alert-danger m-0">Ошибка загрузки данных</div>');
     });
 });
 

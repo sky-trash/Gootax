@@ -1,88 +1,126 @@
-main > .container {
-    padding: 70px 15px 20px;
+html,
+body {
+  height: 100%;
+}
+
+.wrap {
+  min-height: 100%;
+  height: auto;
+  margin: 0 auto -60px;
+  padding: 0 0 60px;
 }
 
 .footer {
-    background-color: #f5f5f5;
-    font-size: .9em;
-    height: 60px;
+  border-top: 1px solid #dee2e6;
 }
 
-.footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
+.rating .bi-star-fill {
+  color: #ffd700;
 }
 
-.not-set {
-    color: #c55;
-    font-style: italic;
+.rating .bi-star {
+  color: #ccc;
 }
 
-/* add sorting icons to gridview sort links */
-a.asc:after, a.desc:after {
-    content: '';
-    left: 3px;
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border: solid 5px transparent;
-    margin: 4px 4px 2px 4px;
-    background: transparent;
+.author-link {
+  cursor: pointer;
+  color: #0d6efd;
+  text-decoration: underline;
 }
 
-a.asc:after {
-    border-bottom: solid 7px #212529;
-    border-top-width: 0;
+.author-link:hover {
+  color: #0a58ca;
 }
 
-a.desc:after {
-    border-top: solid 7px #212529;
-    border-bottom-width: 0;
+.review-item {
+  margin-bottom: 20px;
 }
 
-.grid-view th {
-    white-space: nowrap;
+.jumbotron {
+  text-align: center;
+  background-color: #f8f9fa;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.3rem;
 }
 
-.hint-block {
-    display: block;
-    margin-top: 5px;
-    color: #999;
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-.error-summary {
-    color: #a94442;
-    background: #fdf7f7;
-    border-left: 3px solid #eed3d7;
-    padding: 10px 20px;
-    margin: 0 0 15px 0;
+.navbar-nav .btn-link {
+  color: rgba(255, 255, 255, 0.75);
+  border: none;
+  padding: 0.5rem 0;
 }
 
-/* align the logout "link" (button in form) of the navbar */
-.nav li > form > button.logout {
-    padding-top: 7px;
-    color: rgba(255, 255, 255, 0.5);
+.navbar-nav .btn-link:hover {
+  color: #fff;
+  background: none;
 }
 
-@media(max-width:767px) {
-    .nav li > form > button.logout {
-        display:block;
-        text-align: left;
-        width: 100%;
-        padding: 10px 0;
-    }
+/* Адаптация для Bootstrap 5 */
+.panel {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
 }
 
-.nav > li > form > button.logout:focus,
-.nav > li > form > button.logout:hover {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.75);
+.panel-heading {
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
 }
 
-.nav > li > form > button.logout:focus {
-    outline: none;
+.panel-body {
+  padding: 1rem;
 }
 
-.form-group {
-    margin-bottom: 1rem;
+.panel-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.well {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.glyphicon {
+  display: inline-block;
+  font-family: "Bootstrap Icons";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.glyphicon-star:before {
+  content: "★";
+}
+
+.glyphicon-star-empty:before {
+  content: "☆";
+}
+
+.glyphicon-refresh:before {
+  content: "↻";
+}
+
+.glyphicon-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

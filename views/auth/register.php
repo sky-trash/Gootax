@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 use yii\captcha\Captcha;
 
 /** @var yii\web\View $this */
@@ -11,13 +11,13 @@ $this->title = 'Регистрация';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="auth-register">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title text-center"><?= Html::encode($this->title) ?></h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
           <?php $form = ActiveForm::begin(['id' => 'register-form']); ?>
 
           <?= $form->field($model, 'fio')->textInput(['autofocus' => true]) ?>
@@ -35,18 +35,19 @@ $this->params['breadcrumbs'][] = $this->title;
           ]) ?>
 
           <div class="form-group">
-            <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success btn-block', 'name' => 'register-button']) ?>
+            <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success w-100', 'name' => 'register-button']) ?>
           </div>
 
           <?php ActiveForm::end(); ?>
 
-          <div class="text-center">
+          <div class="text-center mt-3">
             <?= Html::a('Уже есть аккаунт? Войдите', ['login']) ?>
           </div>
 
           <?php if (Yii::$app->session->hasFlash('info')): ?>
-            <div class="alert alert-info">
+            <div class="alert alert-info alert-dismissible fade show mt-3">
               <?= Yii::$app->session->getFlash('info') ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
           <?php endif; ?>
         </div>
