@@ -3,126 +3,78 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\City;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
-        return $this->render('index');
-    }
+        $selectedCityId = Yii::$app->session->get('selected_city_id');
+        $selectedCity = null;
 
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        if ($selectedCityId) {
+            $selectedCity = City::findOne($selectedCityId);
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($selectedCity) {
+            return $this->redirect(['review/city', 'id' => $selectedCity->id]);
         }
 
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
+        $detectedCityName = Yii::$app->ipGeo->getCityByIp();
+        $detectedCity = null;
+
+        if ($detectedCityName) {
+            $detectedCity = Yii::$app->ipGeo->findCityInDatabase($detectedCityName);
+        }
+
+        $cities = City::find()
+            ->joinWith('reviews')
+            ->orderBy(['name' => SORT_ASC])
+            ->all();
+
+        return $this->render('index', [
+            'detectedCity' => $detectedCity,
+            'detectedCityName' => $detectedCityName,
+            'cities' => $cities,
         ]);
     }
 
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
+    public function actionSelectCity($id = null, $confirm = null)
     {
-        Yii::$app->user->logout();
+        if ($id) {
+            $city = City::findOne($id);
+            if ($city) {
+                Yii::$app->session->set('selected_city_id', $city->id);
+                Yii::$app->session->set('selected_city_time', time());
 
-        return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
+                return $this->redirect(['review/city', 'id' => $city->id]);
+            }
         }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
+
+        if ($confirm === 'no') {
+            Yii::$app->session->set('city_detection_refused', true);
+            return $this->redirect(['index']);
+        }
+
+        return $this->redirect(['index']);
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
+    public function actionClearCity()
     {
-        return $this->render('about');
+        Yii::$app->session->remove('selected_city_id');
+        Yii::$app->session->remove('selected_city_time');
+        Yii::$app->session->remove('city_detection_refused');
+
+        return $this->redirect(['index']);
     }
 }

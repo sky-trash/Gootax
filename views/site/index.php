@@ -1,53 +1,70 @@
 <?php
 
-/** @var yii\web\View $this */
+use yii\helpers\Html;
+use yii\helpers\Url;
 
-$this->title = 'My Yii Application';
+/** @var yii\web\View $this */
+/** @var app\models\City $detectedCity */
+/** @var string $detectedCityName */
+/** @var app\models\City[] $cities */
+
+$this->title = 'Система отзывов о городах';
 ?>
 <div class="site-index">
-
-    <div class="jumbotron text-center bg-transparent mt-5 mb-5">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
+    <div class="jumbotron">
+        <h1>Добро пожаловать!</h1>
+        <p class="lead">Система отзывов о городах России</p>
     </div>
 
     <div class="body-content">
+        <?php if ($detectedCityName && $detectedCity && !Yii::$app->session->get('city_detection_refused')): ?>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Определен ваш город</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <h4>"<?= Html::encode($detectedCityName) ?>" - это ваш город?</h4>
+                            <div class="btn-group" style="margin-top: 20px;">
+                                <?= Html::a('Да', ['select-city', 'id' => $detectedCity->id], [
+                                    'class' => 'btn btn-success btn-lg'
+                                ]) ?>
+                                <?= Html::a('Нет', ['select-city', 'confirm' => 'no'], [
+                                    'class' => 'btn btn-default btn-lg'
+                                ]) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <div class="row">
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Выберите город для просмотра отзывов</h3>
+                    </div>
+                    <div class="panel-body">
+                        <?php if (empty($cities)): ?>
+                            <p class="text-muted">Пока нет городов с отзывами.</p>
+                        <?php else: ?>
+                            <div class="list-group">
+                                <?php foreach ($cities as $city): ?>
+                                    <a href="<?= Url::to(['select-city', 'id' => $city->id]) ?>"
+                                        class="list-group-item">
+                                        <h4 class="list-group-item-heading"><?= Html::encode($city->name) ?></h4>
+                                        <p class="list-group-item-text">
+                                            Отзывов: <?= count($city->reviews) ?>
+                                        </p>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>

@@ -4,7 +4,7 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
+    'id' => 'feedback-system',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -13,8 +13,7 @@ $config = [
     ],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '45ba4feOA1cnByCHPSOpCFahGKDjo-z2',
+            'cookieValidationKey' => 'your-cookie-validation-key-here',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -22,15 +21,10 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'loginUrl' => ['auth/login'],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
-        ],
-        'mailer' => [
-            'class' => \yii\symfonymailer\Mailer::class,
-            'viewPath' => '@app/mail',
-            // send all mails to a file by default.
-            'useFileTransport' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -42,32 +36,38 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'city/<id:\d+>' => 'review/city',
+                'author/<id:\d+>' => 'review/author',
+                'login' => 'auth/login',
+                'register' => 'auth/register',
+                'logout' => 'auth/logout',
+                '' => 'site/index',
             ],
         ],
-        */
+        'ipGeo' => [
+            'class' => 'app\components\IpGeoService',
+        ],
+        'session' => [
+            'class' => 'yii\web\Session',
+            'timeout' => 7200,
+        ],
     ],
     'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
